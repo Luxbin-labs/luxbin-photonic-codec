@@ -13,7 +13,15 @@ import {
 } from "luxbin-lang";
 import type { LuxValue, BuiltinFunction } from "luxbin-lang";
 import { compress, decompress, analyzeCompressibility } from "../codec/spectral-compress";
-import { byteToWavelength } from "../codec/photonic-transform";
+import {
+  byteToWavelength,
+  byteToEMWavelength,
+  wavelengthToFrequency,
+  formatFrequency,
+  formatWavelength,
+  EM_BANDS,
+  type EMBandName,
+} from "../codec/photonic-transform";
 
 const SAFE_BUILTINS = new Set([
   "print", "println", "input",
@@ -22,6 +30,9 @@ const SAFE_BUILTINS = new Set([
   "push", "pop", "sort", "reverse", "range", "map", "filter", "indexOf",
   "to_int", "to_float", "to_string", "to_bool", "type",
   "superpose", "measure", "entangle", "hadamard", "photon_wavelength", "photon_char",
+  // Full EM spectrum builtins
+  "em_wavelength", "em_frequency", "em_band", "em_band_label", "em_channel",
+  "em_byte", "em_freq_label", "em_bands", "em_band_range", "em_app_freq",
 ]);
 
 const BLOCKED_PREFIXES = ["fs_", "net_", "os_"];
@@ -78,6 +89,33 @@ function createCodecBuiltins(): Record<string, (args: LuxValue[], env: Environme
       }
       const entries = Array.from(histogram.entries()).sort((a, b) => a[0] - b[0]);
       return entries.map(([wl, count]) => [wl, count] as LuxValue[]) as LuxValue[];
+    },
+
+    // Full EM spectrum builtins for the codec sandbox
+    em_map_byte: (args) => {
+      if (typeof args[0] !== "number") throw new Error("em_map_byte: expected byte (0-255)");
+      const band = (typeof args[1] === "string" ? args[1] : "visible") as EMBandName;
+      const byte = Math.max(0, Math.min(255, Math.round(args[0] as number)));
+      const wl = byteToEMWavelength(byte, band);
+      const freq = wavelengthToFrequency(wl);
+      return `${band}: byte ${byte} → ${formatWavelength(wl)} (${formatFrequency(freq)})`;
+    },
+
+    em_list_bands: () => {
+      return EM_BANDS.map((b) => b.name) as LuxValue[];
+    },
+
+    em_band_info: (args) => {
+      if (typeof args[0] !== "string") throw new Error("em_band_info: expected band name");
+      const band = EM_BANDS.find((b) => b.name === args[0]);
+      if (!band) throw new Error(`em_band_info: unknown band "${args[0]}"`);
+      const result: LuxValue[] = [
+        `${band.label}`,
+        `Wavelength: ${formatWavelength(band.minWavelength || 1e-15)} — ${formatWavelength(band.maxWavelength)}`,
+        `Frequency: ${formatFrequency(band.minFrequency)} — ${formatFrequency(band.maxFrequency)}`,
+        `Uses: ${band.useCases.join(", ")}`,
+      ];
+      return result;
     },
   };
 }
