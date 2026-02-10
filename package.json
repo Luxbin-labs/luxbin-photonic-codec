@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "luxbin-lang": "file:../luxbin-lang",
+    "luxbin-lang": "file:./luxbin-lang-1.0.0.tgz",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
