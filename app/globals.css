@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-photon-violet: #7c3aed;
+  --color-photon-blue: #3b82f6;
+  --color-photon-cyan: #06b6d4;
+  --color-photon-green: #10b981;
+  --color-photon-yellow: #f59e0b;
+  --color-photon-orange: #f97316;
+  --color-photon-red: #ef4444;
+  --color-luxbin-purple: #a855f7;
+  --color-luxbin-dark: #0f0a1a;
+  --color-luxbin-card: #1a1028;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: linear-gradient(135deg, #020617 0%, #1e1040 40%, #0f172a 100%);
+  min-height: 100vh;
+  color: #e2e8f0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Photonic glow effects */
+.photon-glow {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3), 0 0 60px rgba(168, 85, 247, 0.1);
+}
+
+.photon-glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+}
+
+/* Spectrum gradient for decorative elements */
+.spectrum-gradient {
+  background: linear-gradient(
+    90deg,
+    #7c3aed 0%,
+    #3b82f6 20%,
+    #06b6d4 35%,
+    #10b981 50%,
+    #f59e0b 65%,
+    #f97316 80%,
+    #ef4444 100%
+  );
+}
+
+/* Code editor styling */
+.code-editor {
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+  tab-size: 2;
+}
+
+.code-editor:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.5);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 10, 26, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
