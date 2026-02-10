@@ -7,6 +7,7 @@ import { Zap } from "lucide-react";
 const links = [
   { href: "/", label: "Home" },
   { href: "/demo", label: "Demo" },
+  { href: "/audio", label: "Audio" },
   { href: "/benchmark", label: "Benchmarks" },
   { href: "/lll-lab", label: "LLL Lab" },
 ];
